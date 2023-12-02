@@ -1,0 +1,77 @@
+def add_time(start, duration, day=None):
+    start_list = start.split(":")
+    start_list2= start_list[1].split()
+    duration_list = duration.split(":")
+
+    hour = int(start_list[0]) + int(duration_list[0])
+    minute = int(start_list2[0]) + int(duration_list[1])
+    am_pm = start_list2[1]
+    days_later = 0
+
+    days = {'monday' : 1,
+    'tuesday' : 2,
+    'wednesday' : 3,
+    'thursday' : 4,
+    'friday' : 5,
+    'saturday' : 6,
+    'sunday' : 7}
+
+    day_week = day
+
+    if day != None:
+        lower_day = day.lower()
+        day_week = days[lower_day]
+
+    if minute >= 60:
+        minute = minute - 60
+        hour = hour + 1
+
+    while hour >= 12:
+        hour = hour - 12
+        if am_pm == "AM":
+            am_pm = "PM"
+        else:
+            am_pm = "AM"
+            days_later = days_later + 1
+            if day != None:
+                day_week = day_week + 1
+
+    if hour == 0:
+        hour = 12
+
+    if day != None:
+        while day_week > 7:
+            day_week = day_week - 7
+
+    if day_week == 1:
+        day_week = "Monday"
+    elif day_week == 2:
+        day_week = "Tuesday"
+    elif day_week == 3:
+        day_week = "Wednesday"
+    elif day_week == 4:
+        day_week = "Thursday"
+    elif day_week == 5:
+        day_week = "Friday"
+    elif day_week == 6:
+        day_week = "Saturday"
+    else:
+        day_week = "Sunday"
+
+    if minute < 10:
+        minute = '{:02d}'.format(minute)
+
+    if days_later == 0 and day == None:
+        new_time = str(hour) + ':' + str(minute) + ' ' + am_pm
+    elif days_later == 0 and day != None:
+        new_time = str(hour) + ':' + str(minute) + ' ' + am_pm + ', ' + day.title()
+    elif days_later == 1 and day == None:
+        new_time = str(hour) + ':' + str(minute) + ' ' + am_pm + ' (next day)'
+    elif days_later == 1 and day != None:
+        new_time = str(hour) + ':' + str(minute) + ' ' + am_pm + ', ' + day_week.title() + ' (next day)'
+    elif days_later > 1 and day != None:
+        new_time = str(hour) + ':' + str(minute) + ' ' + am_pm + ', ' + day_week.title() + ' (' + str(days_later) + ' days later)'
+    else:
+        new_time = str(hour) + ':' + str(minute) + ' ' + am_pm + ' (' + str(days_later) + ' days later)'
+
+    return new_time
